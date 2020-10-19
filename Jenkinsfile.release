@@ -53,9 +53,9 @@ pipeline {
         // RELEASE_BRANCH => will be set in Initialization phase
 
         // We use quay as temporary registry for testing between the jobs instead of Openshift, due to https://issues.redhat.com/browse/KOGITO-2219
-        IMAGE_REGISTRY_CREDENTIALS = 'release_kogito'
+        IMAGE_REGISTRY_CREDENTIALS = 'tradisso_registry'
         IMAGE_REGISTRY = 'quay.io'
-        IMAGE_NAMESPACE = 'kiegroup'
+        IMAGE_NAMESPACE = 'tradisso'
         // Use nightly for now with a different tag but we should find another solution
         IMAGE_NAME_SUFFIX = 'nightly'
         // TEMP_TAG => will be set in Initialization phase
@@ -63,11 +63,11 @@ pipeline {
         // IMAGE_PROMOTE_TAG => will be set in Initialization phase
 
         // Credentials
-        GIT_AUTHOR='kiegroup'
-        GIT_AUTHOR_CREDS_ID = 'kie-ci' // username/password creds
-        BOT_AUTHOR='bsig-gh-bot'
-        BOT_AUTHOR_CREDS_ID='bsig-gh-bot' // username/password creds
-        GITHUB_TOKEN_CREDS_ID='kie-ci2-token' // secret text creds
+        GIT_AUTHOR='radtriste'
+        GIT_AUTHOR_CREDS_ID = 'radtriste' // username/password creds
+        BOT_AUTHOR='radtriste-bot-account'
+        BOT_AUTHOR_CREDS_ID='radtriste-bot' // username/password creds
+        GITHUB_TOKEN_CREDS_ID='radtriste-gh-token' // secret text creds
     }
 
     stages {
@@ -331,7 +331,7 @@ pipeline {
                     addBooleanParam(buildParams, 'DEPLOY_WITH_LATEST_TAG', params.DEPLOY_AS_LATEST)
                     
                     // To be uncommented for testing if artifacts are released to same repository as the staging
-                    // addStringParam(buildParams, 'MAVEN_ARTIFACT_REPOSITORY', env.STAGING_REPOSITORY) // Get artifacts from staging repository
+                    addStringParam(buildParams, 'MAVEN_ARTIFACT_REPOSITORY', env.STAGING_REPOSITORY) // Get artifacts from staging repository
 
                     addReleasePromoteGitParam(buildParams)
 
