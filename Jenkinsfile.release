@@ -25,9 +25,10 @@ OPERATOR_REPOS=['kogito-cloud-operator']
 JOBS = [:]
 
 pipeline {
-    agent {
-        label 'kie-rhel7 && !master'
-    }
+    // agent {
+    //     label 'kie-rhel7 && !master'
+    // }
+    agent any
 
     parameters {
         booleanParam(name: 'CREATE_RELEASE_BRANCHES_ONLY', defaultValue: 'false', description: 'Set to true if only the create release branches stage should be launched')
@@ -470,29 +471,29 @@ pipeline {
 def buildJob(String jobName, List buildParams) {
     echo "Build ${jobName} with params ${buildParams}"
     
-    def job = build(job: "./${jobName}", wait: true, parameters: buildParams, propagate: false)
-    JOBS[jobName] = job
+    // def job = build(job: "./${jobName}", wait: true, parameters: buildParams, propagate: false)
+    // JOBS[jobName] = job
 
-    def jobResult = job.getResult()
-    def jobUrl = getJobUrl(jobName)
-    if(jobResult != 'SUCCESS'){
-        echo "Sending a notification about an unsuccessful job build ${jobName}."
-        sendNotification("`${jobName}` finished with status `${jobResult}`.\nSee: ${jobUrl}\n\nPlease provide which action should be done (retry ? skip ? abort ?): ${env.BUILD_URL}input")
+    // def jobResult = job.getResult()
+    // def jobUrl = getJobUrl(jobName)
+    // if(jobResult != 'SUCCESS'){
+    //     echo "Sending a notification about an unsuccessful job build ${jobName}."
+    //     sendNotification("`${jobName}` finished with status `${jobResult}`.\nSee: ${jobUrl}\n\nPlease provide which action should be done (retry ? skip ? abort ?): ${env.BUILD_URL}input")
 
-        // abort is handled automatically by the pipeline in the input
-        def result = input message: "Job `${jobName}` is in status ${jobResult}. What do you want to do ?", parameters: [choice(name: 'ACTION', choices: ['retry', 'skip'].join('\n')), string(name: 'MESSAGE', description: 'If you want to add information to your action...')]
-        String resultStr = "Decision was made to ${result['ACTION']} the job `${jobName}`."
-        if(result['MESSAGE'] != ''){
-            resultStr += "Additional Information: `${result['MESSAGE']}`"
-        }
-        echo resultStr
-        sendNotification(resultStr)
+    //     // abort is handled automatically by the pipeline in the input
+    //     def result = input message: "Job `${jobName}` is in status ${jobResult}. What do you want to do ?", parameters: [choice(name: 'ACTION', choices: ['retry', 'skip'].join('\n')), string(name: 'MESSAGE', description: 'If you want to add information to your action...')]
+    //     String resultStr = "Decision was made to ${result['ACTION']} the job `${jobName}`."
+    //     if(result['MESSAGE'] != ''){
+    //         resultStr += "Additional Information: `${result['MESSAGE']}`"
+    //     }
+    //     echo resultStr
+    //     sendNotification(resultStr)
         
-        if(result['ACTION'] == 'retry') {
-            return buildJob(jobName, buildParams)
-        }
-    }
-    return job
+    //     if(result['ACTION'] == 'retry') {
+    //         return buildJob(jobName, buildParams)
+    //     }
+    // }
+    // return job
 }
 
 def getJob(String jobName){
