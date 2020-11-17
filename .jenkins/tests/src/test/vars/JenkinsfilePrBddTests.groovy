@@ -10,7 +10,7 @@ class JenkinsfilePrBddTests extends JenkinsPipelineSpecification {
     def changeTarget = 'user-target'
 
     def setup() {
-        Jenkinsfile = loadPipelineScriptForTest('Jenkinsfile.pr-bdd-tests')
+        Jenkinsfile = loadPipelineScriptForTest('Jenkinsfile.pr.bdd-tests')
 
         explicitlyMockPipelineVariable('githubscm')
         Jenkinsfile.getBinding().setVariable('params', params)
@@ -35,7 +35,7 @@ class JenkinsfilePrBddTests extends JenkinsPipelineSpecification {
 			Jenkinsfile.addAuthorBranchParamsIfExist(params, 'repo')
 		then:
             1 * getPipelineMock('string.call').call(['name' : 'GIT_AUTHOR', 'value' : changeAuthor])
-            1 * getPipelineMock('string.call').call(['name' : 'BUILD_BRANCH_NAME', 'value' : changeBranch])
+            1 * getPipelineMock('string.call').call(['name' : 'GIT_BRANCH_NAME', 'value' : changeBranch])
 	}
 
 	def '[JenkinsfilePrBddTests.groovy] addAuthorBranchParamsIfExist: change target exists' () {
@@ -45,7 +45,7 @@ class JenkinsfilePrBddTests extends JenkinsPipelineSpecification {
 		when:
 			Jenkinsfile.addAuthorBranchParamsIfExist(params, 'repo')
 		then:
-            1 * getPipelineMock('string.call').call(['name' : 'BUILD_BRANCH_NAME', 'value' : changeTarget])
+            1 * getPipelineMock('string.call').call(['name' : 'GIT_BRANCH_NAME', 'value' : changeTarget])
 	}
 
 	def '[JenkinsfilePrBddTests.groovy] addAuthorBranchParamsIfExist: change branch/target doesn\'t exist' () {
@@ -56,8 +56,8 @@ class JenkinsfilePrBddTests extends JenkinsPipelineSpecification {
 			Jenkinsfile.addAuthorBranchParamsIfExist(params, 'repo')
 		then:
             0 * getPipelineMock('string.call').call(['name' : 'GIT_AUTHOR', 'value' : changeAuthor])
-            0 * getPipelineMock('string.call').call(['name' : 'BUILD_BRANCH_NAME', 'value' : changeBranch])
-            0 * getPipelineMock('string.call').call(['name' : 'BUILD_BRANCH_NAME', 'value' : changeTarget])
+            0 * getPipelineMock('string.call').call(['name' : 'GIT_BRANCH_NAME', 'value' : changeBranch])
+            0 * getPipelineMock('string.call').call(['name' : 'GIT_BRANCH_NAME', 'value' : changeTarget])
 	}
 
 	def '[JenkinsfilePrBddTests.groovy] getOptaPlannerBranch' () {
