@@ -1,16 +1,16 @@
 dependent_repositories:
   - name: kogito-runtimes
-    branch: setup_dsl
+    branch: 403.2.x
   - name: kogito-apps
-    branch: setup_dsl
+    branch: 403.2.x
   - name: optaplanner
-    branch: setup_dsl2
+    branch: 407.2.x
   - name: kogito-examples
-    branch: setup_dsl  
+    branch: 403.2.x  
   - name: kogito-images
-    branch: setup_dsl
+    branch: 403.2.x
   - name: kogito-cloud-operator
-    branch: setup_dsl
+    branch: 403.2.x
 
 # Full Example
 # dependent_repositories:
