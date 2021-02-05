@@ -339,6 +339,22 @@ void addUnstableStage(String jobName = ''){
 
 void sendPipelineErrorNotification(){
     String bodyMsg = "Kogito nightly job #${BUILD_NUMBER} was: ${currentBuild.currentResult}"
+    
+    paramsStr = '\n'
+    if(params.SKIP_TESTS) {
+        paramsStr += '- Tests skipped\n'
+    }
+    if(params.SKIP_ARTIFACTS) {
+        paramsStr += '- Artifacts skipped\n'
+    }
+    if(params.SKIP_IMAGES) {
+        paramsStr += '- Images skipped\n'
+    }
+    if(params.SKIP_OPERATOR) {
+        paramsStr += '- Operator skipped\n'
+    }
+    bodyMsg += paramsStr ?: ''
+
     if(FAILED_STAGES.size() > 0){
         bodyMsg += "\nFailed stages: \n- "
         bodyMsg += FAILED_STAGES.collect{ "${it.key} => ${getJobUrl(it.value)}" }.join("\n- ")
